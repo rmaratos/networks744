@@ -1,16 +1,21 @@
-To record new pcap file:
+Simlink Apple Airport Command:
+sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/sbin/airport
 
-sudo tcpdump -nnvs0 -I -i en0 -w 80211.pcap ether host 94:10:3E:3C:E8:71
+Network scan:
+sudo airport -s
 
 To disassociate from wi-fi:
 sudo airport -z
 
+To print current channel:
+sudo airport -c
+
 To pick channel:
 sudo airport -c##
 
-To print channel:
-sudo airport -c
 
 Robert's MBP mac address 60:03:08:93:9c:54
-
 Insight Switch 94:10:3E:3C:E8:71
+
+To record new pcap file:
+sudo tcpdump -nnvs0 -I -i en0 -w 80211.pcap ether host 94:10:3E:3C:E8:71
