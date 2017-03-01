@@ -1,0 +1,58 @@
+###[ RadioTap dummy ]###
+  version   = 0
+  pad       = 0
+  len       = 48
+  present   = TSFT+Flags+Channel+dBm_AntSignal+dBm_AntNoise+Antenna+b18+b19+b20
+  notdecoded= '\xb2\xc6\x08\x07\x00\x00\x00\x00\x10\x00l\t\x80\x04\xd4\xa3\x00\x00\x00\x00\x80\x04\x01\x00l\t\x01"\x1f\x00\x07\x00%\x0e\x00\x00\x00\x00\x00\x00'
+###[ 802.11 ]###
+     subtype   = 8L
+     type      = Data
+     proto     = 0L
+     FCfield   = to-DS
+     ID        = 9216
+     addr1     = 00:1a:1e:93:1e:60
+     addr2     = 94:10:3e:3c:e8:71
+     addr3     = 00:1f:26:41:f0:00
+     SC        = 57936
+     addr4     = None
+###[ 802.11 QoS ]###
+        TID       = 0L
+        EOSP      = 0L
+        Ack Policy= 0L
+        Reserved  = 0L
+        TXOP      = 0
+###[ LLC ]###
+           dsap      = 0xaa
+           ssap      = 0xaa
+           ctrl      = 3
+###[ SNAP ]###
+              OUI       = 0x0
+              code      = 0x800
+###[ IP ]###
+                 version   = 4L
+                 ihl       = 5L
+                 tos       = 0x0
+                 len       = 498
+                 id        = 24209
+                 flags     = DF
+                 frag      = 0L
+                 ttl       = 64
+                 proto     = tcp
+                 chksum    = 0x2948
+                 src       = 128.237.235.215
+                 dst       = 23.21.45.83
+                 \options   \
+###[ TCP ]###
+                    sport     = 4610
+                    dport     = pcsync_https
+                    seq       = 169744876
+                    ack       = 3933839849
+                    dataofs   = 5L
+                    reserved  = 0L
+                    flags     = PA
+                    window    = 7078
+                    chksum    = 0x428a
+                    urgptr    = 0
+                    options   = []
+###[ Raw ]###
+                       load      = '\x17\x03\x01\x00 \xe5j1\xfbz\xf1\x8fE@\x9a\xa4qFu`\xa5`\xa4FK\xad\xcf{iJ*w\xc7\xcb\x9cb\xa4\x17\x03\x01\x01\xa0\x13e\xc7P=\xab\xda\xfb\xf6\xa8x\x9a\xda\x1aK\xa5\xd0\xed\xad\xa3K\x91\xb6\x96\x9d\x8f\xde\xbb\xfe\x83\xe6\xeb\x16\xd3&\xf3\xc0ajc\xbb\x1fe\x06\xc3*\xb6\x96Oz\xc9\xf0\t\x9a\xc7\xd9o\x16\x1f/8\xd7\xd7@PC\xf9\xa8\xa7\xc7\xa9\x1f\xad\x14Y\xc4qi\x18\xbdFo\x7f\x17\xb7$\'L\xa6\xdc!\x1b\x1b\x91\xb6\xeb\x87\xb1\x83~\xe9\x99}\x1aB+\x86t\xdas\xe4\x88n7\xe8Z\xa0JV\xbai(\xd4\xf856\xa0\x05\x00\x94\x9ap`\xf4M\xdd\xa5BW\xf0^\xe3\xaa\xaf\xb0\xd2\xbd\x08\x92,\xc4H\n\xc8\xc8\'\x8c\xdaC\x95\x0fLy\x8d]\\O\x91\xe0\xd1~"=\xec\xc3\x12\x86l\xa0t\xf8\xb9/\x8b\xb0Z\xef~\x9c\xfd\x87OP\x89)\x19\xff>H\xae\x05\xeb\xa4\x9d\xd6\xe3\r(}3\xfb\xa2 \x9e.\x04\xd9\xd41\xcev=\x91#\xcc*\xe2\xeb\xa4\xee\xe2\xd8X\xf9fX\x0b07?\xdf\xca\x9e\x95c1\xd7\xd7\xd3~\xa7\xe1\xc9\xe6\x19\x9c\x14\x15\xef\xaf{&\xdc5lE\x19\x91!r\x8d\xe1\x10<\x83+7i\x91_L\xc2A\xdf\x7f\xddT19Y\x96\xcc\xa0\xd7\xce\x8a<\xea\xef\xb08U5\x80-x\xca\xa3\x81d\r>\xd9\x1b\xdfj\xe3\x8d\x1d\x089\x89\x8fN[L\xe0\xb3QIB\xe6\xdd\xc1\x99A&B\xcb\x85v2\x11^\x91:\x86\xcb\xd6G\xe9\x14\xb1\xf3:\x9b\xa4\x04T\xbb\n\x84\x03\x06\xef5\x8ck\xb3\xa1\xa8\xa9A\xd0\xb9&\xe7\xda.\xe5\x9ft\xee\xbc\xcc\xd9\xfag\xd1xw\x84^\xdba\xffEN\x9a\x101\xb3\x9b/c\x0f\xc1J1,-\xe0z\xe6\x16\xd8'

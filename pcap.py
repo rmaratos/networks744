@@ -14,11 +14,18 @@ class Packet(object):
     """ Extract useful info from Scapy Packet"""
     def __init__(self, packet):
         #self.packet = packet
+        print(packet.show())
+        return
         self.time = packet.time
         self.ds = get_ds(packet)
+        self.payload = packet.payload
         try:
-            self.size = len(packet.wepdata)
+            # print "PACKET", packet
+            # print "PAYLOAD", packet.payload
+            # self.size = len(packet.wepdata)
+            self.size = len(packet.payload)
         except:
+            print("exception!")
             self.size = 0
 
 class Client(object):
@@ -69,6 +76,7 @@ class Client(object):
         for packet in self.received_packets:
             t = packet.time
             i = int((t - start) / BUCKET_SIZE)
+            print i, packet.size
             self.received_buckets[i] += packet.size
         # print self.sent_buckets
         # print self.received_buckets
@@ -104,6 +112,7 @@ class Monitor(object):
             try:
                 if (p.type==2 and p.subtype==8):
                     #60:03:08:93:9c:54
+                    # print p.addr2, p.addr1
                     if (p.addr2==self.mac_addr or p.addr1==self.mac_addr):
                         #data_packets.append(p)
                         packet = Packet(p)
@@ -133,14 +142,15 @@ class Monitor(object):
         #for raw_packet in data_packets:
         #print self.clients
 
-# m = Monitor('80211.pcap')
-# c = m.clients['78:31:c1:c5:8f:4e']
+# m = Monitor('80211.pcap', '94:10:3e:3c:e8:71')
+# c = m.client
 #
 # total_bytes = 0
-# # for p in c.received_packets:
-# #     print p.time, len(p.wepdata)
-# #     total_bytes += len(p.wepdata)
-# #
-# # print total_bytes / (c.packets[-1].time - c.packets[0].time)
+# for p in c.received_packets:
+#     print p.time, len(p.payload)
 #
+#     total_bytes += len(p.payload)
+#
+# print total_bytes / (c.packets[-1].time - c.packets[0].time)
+
 # c.buckets()
