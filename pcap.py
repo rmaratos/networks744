@@ -159,3 +159,9 @@ print len(c.received_packets)
 # packet.time = timestamp
 # packet.ds = SENT/RECEIVED
 # packet.size = size of payload
+
+training_data = []
+for p in c.packets:
+    training_data.append((p.time, p.ds, p.size))
+
+print training_data
