@@ -2,6 +2,7 @@ from scapy.all import rdpcap
 import logging, math, subprocess
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from Tkinter import *
+import traceback
 
 SENT = 1
 RECEIVED = 2
@@ -14,11 +15,10 @@ class Packet(object):
     """ Extract useful info from Scapy Packet"""
     def __init__(self, packet):
         #self.packet = packet
-        print(packet.show())
-        return
+        # print(packet.show())
         self.time = packet.time
         self.ds = get_ds(packet)
-        self.payload = packet.payload
+        # self.payload = packet.payload
         try:
             # print "PACKET", packet
             # print "PAYLOAD", packet.payload
@@ -88,12 +88,15 @@ class Client(object):
 
 
 class Monitor(object):
-    def __init__(self, pcap, mac_addr):
+    def __init__(self, pcap, mac_addr, scan=False):
         self.pcap = pcap
         self.mac_addr = mac_addr
         #self.clients = {}
         self.client = None
-        self.scan_pcap()
+        if scan:
+            self.scan_pcap()
+        else:
+            self.read_pcap()
 
     def scan_pcap(self):
         print "scan_pcap START"
@@ -101,37 +104,40 @@ class Monitor(object):
         print "calling command", cmd
         subprocess.call(cmd, shell=True)
         print "command done, reading pcap"
+        self.read_pcap()
+
+    def read_pcap(self):
         packets = rdpcap(self.pcap)
-        # maybe ignore retry packets too?
-        # data_packets = filter(lambda p:(p.type==2 and p.subtype==8), packets)
-        #data_packets = []
-        # count = 0
         print "scan_pcap READ"
+        i = 0
         for p in packets:
-            # count += 1
+            i += 1
             try:
                 if (p.type==2 and p.subtype==8):
-                    #60:03:08:93:9c:54
-                    # print p.addr2, p.addr1
+                    # print p.addr2, p.addr1, self.mac_addr
                     if (p.addr2==self.mac_addr or p.addr1==self.mac_addr):
-                        #data_packets.append(p)
                         packet = Packet(p)
+                        # if i == 2:
+                        # print p.show()
+                        # print "SIZE", len(p.getlayer('TCP').payload)
+                        # break
 
+                        # print packet.ds, packet.addr1, packet.addr2, packet.addr3, packet.addr4
                         if packet.ds == SENT:
                             client_mac = p.addr2
                         elif packet.ds == RECEIVED:
                             client_mac = p.addr1
                         else:
                             client_mac = None
-                            # print "client_mac None"
-                        # print ds, packet.addr1, packet.addr2, packet.addr3, packet.addr4
-                        #if client_mac in self.clients:
                         if self.client == None:
                              print "!!!setting client"
                              self.client = Client(packet, client_mac)
                         else:
                             self.client.add_packet(packet)
             except:
+                print "error!!!"
+                # print p.show()
+                # traceback.print_exc()
                 pass
         print "scan_pcap DONE"
 
@@ -142,15 +148,14 @@ class Monitor(object):
         #for raw_packet in data_packets:
         #print self.clients
 
-# m = Monitor('80211.pcap', '94:10:3e:3c:e8:71')
-# c = m.client
-#
-# total_bytes = 0
-# for p in c.received_packets:
-#     print p.time, len(p.payload)
-#
-#     total_bytes += len(p.payload)
-#
-# print total_bytes / (c.packets[-1].time - c.packets[0].time)
+m = Monitor('active.pcap', '94:10:3e:3c:e8:71')
+c = m.client
 
-# c.buckets()
+print len(c.packets)
+print len(c.sent_packets)
+print len(c.received_packets)
+
+# PACKET DATA
+# packet.time = timestamp
+# packet.ds = SENT/RECEIVED
+# packet.size = size of payload

@@ -118,7 +118,7 @@ class Visual(object):
         print "raised"
 
     def update_plot(self):
-        m = Monitor(self.pcap_file, self.mac)
+        m = Monitor(self.pcap_file, self.mac, scan=True)
         c = m.client #computer
         if not c:
             print "C is none"
