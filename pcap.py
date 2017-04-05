@@ -6,7 +6,7 @@ import traceback
 
 SENT = 1
 RECEIVED = 2
-BUCKET_SIZE = 0.1
+BUCKET_SIZE = 5
 def get_ds(packet):
     return packet.FCfield & 0x3
 
@@ -171,26 +171,40 @@ class Monitor(object):
         #for raw_packet in data_packets:
         #print self.clients
 
-m = Monitor('active.pcap', '94:10:3e:3c:e8:71')
-c = m.client
+def make_training_data(pcap, mac):
+    m = Monitor(pcap,mac)
+    c = m.client
 
-print len(c.packets)
-print len(c.sent_packets)
-print len(c.received_packets)
+    print len(c.packets)
+    print len(c.sent_packets)
+    print len(c.received_packets)
 
-print c.buckets()
+    print c.buckets()
 
-# PACKET DATA
-# packet.time = timestamp
-# packet.ds = SENT/RECEIVED
-# packet.size = size of payload
+    # PACKET DATA
+    # packet.time = timestamp
+    # packet.ds = SENT/RECEIVED
+    # packet.size = size of payload
 
-training_data = []
-for p in c.packets:
-    training_data.append((p.time, int(p.ds), p.size, p.mac_addr,
-                          p.sport, p.dport, p.bucket_size, p.bucket_count))
+    training_data = []
+    for p in c.packets:
+        split_addr = p.mac_addr.split(':')
+        mac_addr0 = int(split_addr[0], 16)
+        mac_addr1 = int(split_addr[1], 16)
+        mac_addr2 = int(split_addr[2], 16)
+        training_data.append([int(p.ds), p.size, mac_addr0, mac_addr1, mac_addr2,
+                              p.sport, p.dport, p.bucket_size, p.bucket_count])
 
 
-# for packet in training_data:
-#     print packet
-print len(training_data)
+    # for packet in training_data:
+    #     print packet
+    return str(training_data)
+# print len(training_data)
+
+with open('data/active.py', 'w') as f:
+    s = make_training_data('active.pcap', '94:10:3e:3c:e8:71')
+    f.write('DATA=' + s)
+
+with open('data/startup.py', 'w') as f:
+    s = make_training_data('startup2.pcap', '94:10:3e:3c:e8:71')
+    f.write('DATA=' + s)
