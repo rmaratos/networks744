@@ -13,11 +13,14 @@ def get_ds(packet):
 
 class Packet(object):
     """ Extract useful info from Scapy Packet"""
-    def __init__(self, packet):
+    def __init__(self, packet, mac_addr):
         #self.packet = packet
         # print(packet.show())
         self.time = packet.time
         self.ds = get_ds(packet)
+        self.mac_addr = mac_addr
+        self.sport = packet.sport
+        self.dport = packet.dport
         # self.payload = packet.payload
         try:
             # print "PACKET", packet
@@ -69,15 +72,35 @@ class Client(object):
         num_buckets = int(math.ceil(delta / BUCKET_SIZE))
         self.sent_buckets = [0] * num_buckets
         self.received_buckets = [0] * num_buckets
+        self.sent_count_buckets = [0] * num_buckets
+        self.received_count_buckets = [0] * num_buckets
         for packet in self.sent_packets:
             t = packet.time
             i = int((t - start) / BUCKET_SIZE)
             self.sent_buckets[i] += packet.size
+            self.sent_count_buckets[i] += 1
         for packet in self.received_packets:
             t = packet.time
             i = int((t - start) / BUCKET_SIZE)
-            print i, packet.size
+            # print i, packet.size
             self.received_buckets[i] += packet.size
+            self.received_count_buckets[i] += 1
+
+        # print self.sent_buckets
+        # print self.received_buckets
+
+        for packet in self.sent_packets:
+            t = packet.time
+            i = int((t - start) / BUCKET_SIZE)
+            packet.bucket_size = self.sent_buckets[i]
+            packet.bucket_count = self.sent_count_buckets[i]
+        for packet in self.received_packets:
+            t = packet.time
+            i = int((t - start) / BUCKET_SIZE)
+            # print i, packet.size
+            packet.bucket_size = self.received_buckets[i]
+            packet.bucket_count = self.received_count_buckets[i]
+
         # print self.sent_buckets
         # print self.received_buckets
         return BUCKET_SIZE, delta
@@ -116,7 +139,7 @@ class Monitor(object):
                 if (p.type==2 and p.subtype==8):
                     # print p.addr2, p.addr1, self.mac_addr
                     if (p.addr2==self.mac_addr or p.addr1==self.mac_addr):
-                        packet = Packet(p)
+                        packet = Packet(p, self.mac_addr)
                         # if i == 2:
                         # print p.show()
                         # print "SIZE", len(p.getlayer('TCP').payload)
@@ -155,6 +178,8 @@ print len(c.packets)
 print len(c.sent_packets)
 print len(c.received_packets)
 
+print c.buckets()
+
 # PACKET DATA
 # packet.time = timestamp
 # packet.ds = SENT/RECEIVED
@@ -162,6 +187,10 @@ print len(c.received_packets)
 
 training_data = []
 for p in c.packets:
-    training_data.append((p.time, p.ds, p.size))
+    training_data.append((p.time, int(p.ds), p.size, p.mac_addr,
+                          p.sport, p.dport, p.bucket_size, p.bucket_count))
 
-print training_data
+
+# for packet in training_data:
+#     print packet
+print len(training_data)
