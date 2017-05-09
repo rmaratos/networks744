@@ -213,7 +213,7 @@ class Monitor(object):
 
         # for device in sorted(device_set):
         #     print device
-        print_devices(device_set)
+        # print_devices(device_set)
 
     def make_training_data(self):
         training_data_list = []
@@ -255,7 +255,7 @@ def print_devices(macs):
 #     s = make_training_data('startup.pcap', '94:10:3e:3c:e8:71')
 #     f.write('DATA=' + s)
 PREFIXES = {
-    "94:10:3e:3c:E8:71": "BELKIN",
+    "94:10:3e:3c:e8:71": "BELKIN",
     # "b4:5d:50": "Macbook",
     "2c:33:61:90:98:f5": "iPhone"
 }
